@@ -1,6 +1,7 @@
 const axios = require('axios');
 const config = require('../config');
 const savefromdotnet = "https://en.savefrom.net/18/#url=https://www.youtube.com/watch?v=";
+const ytview = "https://www.youtube.com/watch?v=";
 
 async function mainF(url) {
     if (url.startsWith("https://youtu.be/")) {
