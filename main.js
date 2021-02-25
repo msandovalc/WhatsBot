@@ -13,9 +13,15 @@ const youtube = require('./modules/youtube');
 const weather = require('./modules/weather');
 const { exec } = require('child_process');
 const help = require('./modules/help');
+const menu = require('./modules/menu');
 const translator = require('./modules/translator');
 const start = require('./modules/start');
+const bonusimage = require('./modules/bonusimage');
+const residualimage = require('./modules/residualimage');
 const ud = require('./modules/ud');
+const { promisify } = require('util')
+const sleep = promisify(setTimeout)
+
 
 const client = new Client({ puppeteer: { headless: true, args: ['--no-sandbox'] }, session: config.session });
 
@@ -30,273 +36,256 @@ client.on('ready', () => {
 });
 
 client.on('message', async msg => {
-    if (msg.author == undefined && config.pmpermit_enabled == "true") { // Pm check for pmpermit module
-        var pmpermitcheck = await pmpermit.handler(msg.from.split("@")[0])
+    console.log('MESSAGE RECEIVED', msg);
+
+    if (msg.body === '!ping') {
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'pong');
+    }
+    else if (msg.body === '!start') {
+        const contact = await msg.getContact();
         const chat = await msg.getChat();
-        if (pmpermitcheck == "permitted") {
-            // do nothing
-        } else if (pmpermitcheck.mute == true && chat.isMuted == false) { // mute 
-            msg.reply(pmpermitcheck.msg)
-            const chat = await msg.getChat();
 
-            var unmuteDate = new Date();
-            unmuteDate.setSeconds(Number(unmuteDate.getSeconds()) + Number(config.pmpermit_mutetime));
-            await chat.mute(unmuteDate)
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
 
-        } else if (chat.isMuted == true) {
-            //do nothing
-        } else if (pmpermitcheck == "error") {
-            //do nothing
+        chat.sendMessage(`Hola @${contact.number}, un gusto saludarle 😀!\nSoy el *Bot* de Edificando Sueños, le estaré atendiendo a nombre de Manuel Sandoval`, {
+            mentions: [contact]
+        });
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'A continuación le enviaré información acerca de este gran proyecto 👇👇👇👇👇');
+
+    } else if (msg.body === '!chats') {
+        const chats = await client.getChats();
+        client.sendMessage(msg.from, `The bot has ${chats.length} chats open.`);
+    } else if (msg.body === '!info') {
+        let info = client.info;
+        client.sendMessage(msg.from, `
+            *Connection info*
+            User name: ${info.pushname}
+            My number: ${info.me.user}
+            Platform: ${info.platform}
+            WhatsApp version: ${info.phone.wa_version}
+        `);
+    } else if (msg.body === '!typing') {
+        const chat = await msg.getChat();
+        // simulates typing in the chat
+        chat.sendStateTyping();
+    } else if (msg.body === '!recording') {
+        const chat = await msg.getChat();
+        // simulates recording audio in the chat
+        chat.sendStateRecording();
+    } else if (msg.body === '!clearstate') {
+        const chat = await msg.getChat();
+        // stops typing or recording in the chat
+        chat.clearState();
+    } else if (msg.body === '!menu') {
+        const chat = await msg.getChat();
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        var data = await menu.getMenu();
+        client.sendMessage(msg.from, data.message)
+
+    } else if (msg.body === '1') {
+
+        const chat = await msg.getChat();
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'Este es el video del concepto general ' +
+        'del desarrollo del negocio. ');
+
+        // Simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Youtube Video
+        var data = await youtube.mainF("https://youtu.be/q0QlAHN6wg8");
+        if (data == "error") {
+        client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
         } else {
-            msg.reply(pmpermitcheck.msg)
+        client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                    { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
+        }
+    } else if (msg.body === '2') {
+        
+        const chat = await msg.getChat();
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'Estos son un par de videos de testimonios de 2 grandes mujeres ' +
+        'lideres, empoderadas y exitosa que empezaron enfocarse en este proyecto solo con el ' +
+        'deseo de hacer realidad sus sueños.' );
+
+        // Simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Youtube Video
+        var data = await youtube.mainF("https://youtu.be/hyhd7AJ19CU");
+        if (data == "error") {
+        client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
+        } else {
+        client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                    { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
         }
 
-    } else {
-        if (msg.body.includes("!info")) {
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
 
-            var startdata = await start.get(await client.info.getBatteryStatus(), client.info.phone)
-            client.sendMessage(msg.to, new MessageMedia(startdata.mimetype, startdata.data, startdata.filename), { caption: startdata.msg })
-
+        // Youtube Video
+        data = await youtube.mainF("https://youtu.be/iynQrsFZvvM");
+        if (data == "error") {
+            client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
+        } else {
+            client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                                { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
         }
-    }
+    } else if (msg.body === '3') {
+
+        const chat = await msg.getChat();
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'Dos imágenes donde se especifica de manera general algunos beneficios  ' +
+                                    'y 9 maneras de generar ingresos residuales');
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new media message to the same chat
+        client.sendMessage(msg.from, new MessageMedia(bonusimage.mimetype, bonusimage.data, bonusimage.filename), { caption: bonusimage.msg });
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        client.sendMessage(msg.from, new MessageMedia(residualimage.mimetype, residualimage.data, residualimage.filename), { caption: residualimage.msg });
+        
+    }  else if (msg.body === '4') {
+
+        const chat = await msg.getChat();
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'Estos son los horarios de las presentacciónes de negocios  ' +
+                                    'Por favor elige uno de los horarios a continuación -->');
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+    } else if (msg.body === '5') {
+
+        const chat = await msg.getChat();
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'Por favor elige alguna de las opciones disponibles para agendar la llamada ' +
+                                    'Calendaly -->');
+
+    } else if (msg.body === '6') {
+
+        const chat = await msg.getChat();
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+         await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, 'Vive una vida diferente');
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Youtube Video
+        data = await youtube.mainF("https://youtu.be/HqhkFq-4yj8");
+        if (data == "error") {
+            client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
+        } else {
+            client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                                { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
+        }
+    } 
 });
 
-client.on('message_create', async(msg) => {
+client.on('message_create', (msg) => {
+    // Fired on all message creations, including your own
     if (msg.fromMe) {
-        if (msg.body == "!allow" && config.pmpermit_enabled == "true" && !msg.to.includes("-")) { // allow and unmute the chat (PMPermit module)
-
-            pmpermit.permitacton(msg.to.split("@")[0])
-            var chat = await msg.getChat();
-            await chat.unmute(true)
-            msg.reply("Allowed for PM")
-
-        } else if (msg.body == "!nopm" && config.pmpermit_enabled == "true" && !msg.to.includes("-")) { // not allowed for pm (PMPermit module)
-
-            pmpermit.nopermitacton(msg.to.split("@")[0])
-            msg.reply("Not Allowed for PM")
-
-        } else if (msg.body == "!block" && !msg.to.includes("-")) { // Block an user in pm
-
-            var chat = await msg.getChat()
-            var contact = await chat.getContact()
-            msg.reply("You have been Blocked")
-            contact.block()
-
-        } else if (msg.body == "!mute" && !msg.to.includes("-")) { // Mute an user in pm
-
-            var chat = await msg.getChat()
-            var unmuteDate = new Date()
-            unmuteDate.setSeconds(Number(unmuteDate.getSeconds()) + Number(config.pmpermit_mutetime));
-            await chat.mute(unmuteDate)
-            msg.reply(`You have been muted for ${config.pmpermit_mutetime / 60} Minutes`)
-
-        } else if (msg.body == "!unmute" && !msg.to.includes("-")) { // Unmute an user in pm
-
-            var chat = await msg.getChat();
-            await chat.unmute(true)
-            msg.reply(`You have been unmuted`)
-
-        } else if (msg.body.startsWith("!term ")) { // Terminal
-
-            msg.delete(true)
-            exec("cd public && " + msg.body.replace("!term ", ""), (error, stdout, stderr) => {
-                if (error) {
-                    client.sendMessage(msg.to, "*whatsbot~:* ```" + error + "```")
-                } else if (stderr) {
-                    client.sendMessage(msg.to, "*whatsbot~:* ```" + stderr + "```")
-                } else {
-                    client.sendMessage(msg.to, "*whatsbot~:* ```" + stdout + "```")
-                }
-            })
-
-        } else if (msg.body.startsWith("!help")) { // help module
-
-            msg.delete(true)
-            var data = await help.mainF(msg.body)
-            client.sendMessage(msg.to, data)
-
-        } else if (msg.body == "!ping") { // Ping command
-
-            msg.reply("Pong !!!");
-
-        } else if (msg.body == "!start") { // Start command
-            msg.delete(true)
-            var startdata = await start.get(await client.info.getBatteryStatus(), client.info.phone)
-            client.sendMessage(msg.to, new MessageMedia(startdata.mimetype, startdata.data, startdata.filename), { caption: startdata.msg })
-
-        } else if (msg.body == '!delete' && msg.hasQuotedMsg) {
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            if (quotedMsg.fromMe) {
-                quotedMsg.delete(true);
-            } else {
-                client.sendMessage(msg.to, "Sorry, I can't delete that message.");
-            }
-
-        } else if (msg.body.startsWith("!qr ")) { // QR Code Gen
-
-            msg.delete(true)
-            var data = await qr.qrgen(msg.body.replace("!qr ", ""));
-            client.sendMessage(msg.to, new MessageMedia(data.mimetype, data.data, data.filename), { caption: `QR code for 👇\n` + "```" + msg.body.replace("!qr ", "") + "```" });
-
-        } else if (msg.body.startsWith("!qr") && msg.hasQuotedMsg) { // QR Code Gen from reply text
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            var data = await qr.qrgen(quotedMsg.body);
-            client.sendMessage(msg.to, new MessageMedia(data.mimetype, data.data, data.filename), { caption: `QR code for 👇\n` + "```" + quotedMsg.body + "```" });
-
-        } else if (msg.body.startsWith("!zee5 ")) { // Zee5 Module
-
-            msg.delete(true)
-            var data = await zee.mainF(msg.body.replace("!zee5 ", ""));
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch this Zee5 Content, Maybe it's a wrong url.```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), { caption: `🎥 *${data.title}* _(${data.genre})_\n\n📄 ` + "```" + data.description + "```" + `\n\n*Stream Url* 👇\n${data.url}` });
-            }
-
-        } else if (msg.body.startsWith("!jiosaavn ")) { // Jiosaavn Module
-
-            msg.delete(true)
-            var data = await saavn.mainF(msg.body.replace("!jiosaavn ", ""));
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch this Jiosaavn Link, Maybe it's a wrong url.```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), { caption: `🎶 *${data.title}* _(${data.released_year})_\n\n📀 *Artist :*  ` + "```" + data.singers + "```\n📚 *Album :*  " + "```" + data.album + "```" + `\n\n*Download Url* 👇\n${data.url}` });
-            }
-
-        } else if (msg.body.startsWith("!jiosaavn") && msg.hasQuotedMsg) { // Jiosaavn Module message reply
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            var data = await saavn.mainF(quotedMsg.body);
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch this Jiosaavn Link, Maybe it's a wrong url.```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), { caption: `🎶 *${data.title}* _(${data.released_year})_\n\n📀 *Artist :*  ` + "```" + data.singers + "```\n📚 *Album :*  " + "```" + data.album + "```" + `\n\n*Download Url* 👇\n${data.url}` });
-            }
-
-        } else if (msg.body.startsWith("!carbon ")) { // Carbon Module
-
-            msg.delete(true)
-            var data = await carbon.mainF(msg.body.replace("!carbon ", ""));
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to create the Carbon.```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.mimetype, data.data, data.filename), { caption: `Carbon for 👇\n` + "```" + msg.body.replace("!carbon ", "") + "```" });
-            }
-
-        } else if (msg.body.startsWith("!carbon") && msg.hasQuotedMsg) { // Carbon Module message reply
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            var data = await carbon.mainF(quotedMsg.body);
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to create the Carbon.```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.mimetype, data.data, data.filename), { caption: `Carbon for 👇\n` + "```" + quotedMsg.body + "```" });
-            }
-
-        } else if (msg.body.startsWith("!directlink") && msg.hasQuotedMsg) { // Telegraph Module
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            var attachmentData = await quotedMsg.downloadMedia();
-            var data = await telegraph.mainF(attachmentData);
-            if (data == "error") {
-                quotedMsg.reply(`Error occured while create direct link.`)
-            } else {
-                quotedMsg.reply(`🔗 *Direct Link 👇*\n\n` + "```" + data + "```")
-            }
-
-        } else if (msg.body.startsWith("!yt ")) { // Youtube Module
-
-            msg.delete(true)
-            var data = await youtube.mainF(msg.body.replace("!yt ", ""));
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), { caption: `*${data.title}*\n\nViews: ` + "```" + data.views + "```\nLikes: " + "```" + data.likes + "```\nComments: " + "```" + data.comments + "```\n\n*Download Link* 👇\n" + "```" + data.download_link + "```" });
-            }
-
-        } else if (msg.body.startsWith("!yt") && msg.hasQuotedMsg) { // Youtube Module Reply
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            var data = await youtube.mainF(quotedMsg.body);
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-            } else {
-                client.sendMessage(msg.to, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), { caption: `*${data.title}*\n\nViews: ` + "```" + data.views + "```\nLikes: " + "```" + data.likes + "```\nComments: " + "```" + data.comments + "```\n\n*Download Link* 👇\n" + "```" + data.download_link + "```" });
-            }
-
-        } else if (msg.body.startsWith("!weather ")) { // Weather Module
-
-            msg.delete(true)
-            var data = await weather.mainF(msg.body.replace("!weather ", ""));
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch Weather```")
-            } else {
-                client.sendMessage(msg.to, `*Today's Weather at ${data.place}*\n` + "```" + data.current_observation.text + " (" + data.current_observation.temperature + "°C)```\n\n*Type:* " + "```" + data.today_forcast.text + "```\n*Max temperature:* " + "```" + data.today_forcast.high + "°C```\n*Min temperature:* " + "```" + data.today_forcast.low + "°C```");
-            }
-
-        } else if (msg.body.startsWith("!tr") && msg.hasQuotedMsg) { // Translator Module reply
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage()
-            var data = await translator.argu(quotedMsg.body, msg.body)
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened while translate```")
-            } else {
-                client.sendMessage(msg.to, `*Original (${data.ori_lang}) :* ` + "```" + data.original + "```\n\n" + `*Translation (${data.trans_lang}) :* ` + "```" + data.translated + "```")
-            }
-
-        } else if (msg.body.startsWith("!tr")) { // Translator Module
-
-            msg.delete(true)
-            var data = await translator.single(msg.body)
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened while translate```")
-            } else {
-                client.sendMessage(msg.to, `*Original (${data.ori_lang}) :* ` + "```" + data.original + "```\n\n" + `*Translation (${data.trans_lang}) :* ` + "```" + data.translated + "```")
-            }
-
-        } else if (msg.body.startsWith("!ud ")) { // Urban Dictionary Module
-
-            msg.delete(true)
-            var data = await ud.mainF(msg.body.replace("!ud ", ""))
-            if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened while Lookup on Urban Dictionary```")
-            } else {
-                client.sendMessage(msg.to, "*Term:* ```" + data.term + "```\n\n" + "*Definition:* ```" + data.def + "```\n\n" + "*Example:* ```" + data.example + "```")
-            }
-        } else if (msg.body.startsWith("!sticker") && msg.hasQuotedMsg) { // Sticker Module
-
-            msg.delete(true)
-            var quotedMsg = await msg.getQuotedMessage();
-            if (quotedMsg.hasMedia) {
-                var attachmentData = await quotedMsg.downloadMedia();
-                client.sendMessage(msg.to, new MessageMedia(attachmentData.mimetype, attachmentData.data, attachmentData.filename), { sendMediaAsSticker: true });
-            } else {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```No image found to make a Sticker```")
-            }
-        } else if (msg.body == "!awake") {
-            client.sendPresenceAvailable()
-            msg.reply("```" + "I will be online from now." + "```")
-        }
+        // do stuff here
     }
 });
 
-client.on('message_revoke_everyone', async(after, before) => {
+client.on('message_revoke_everyone', async (after, before) => {
+    // Fired whenever a message is deleted by anyone (including you)
+    console.log(after); // message after it was deleted.
     if (before) {
-        if (before.fromMe !== true && before.hasMedia !== true && before.author == undefined && config.enable_delete_alert == "true") {
-            client.sendMessage(before.from, "_You deleted this message_ 👇👇\n\n" + before.body)
-        }
+        console.log(before); // message before it was deleted.
     }
 });
 
+client.on('message_revoke_me', async (msg) => {
+    // Fired whenever a message is only deleted in your own view.
+    console.log(msg.body); // message before it was deleted.
+});
+
+client.on('message_ack', (msg, ack) => {
+    /*
+        == ACK VALUES ==
+        ACK_ERROR: -1
+        ACK_PENDING: 0
+        ACK_SERVER: 1
+        ACK_DEVICE: 2
+        ACK_READ: 3
+        ACK_PLAYED: 4
+    */
+
+    if(ack == 3) {
+        // The message was read
+    }
+});
+
+client.on('group_join', (notification) => {
+    // User has joined or been added to the group.
+    console.log('join', notification);
+    notification.reply('User joined.');
+});
+
+client.on('group_leave', (notification) => {
+    // User has left or been kicked from the group.
+    console.log('leave', notification);
+    notification.reply('User left.');
+});
+
+client.on('group_update', (notification) => {
+    // Group picture, subject or description has been updated.
+    console.log('update', notification);
+});
+
+client.on('change_battery', (batteryInfo) => {
+    // Battery percentage for attached device has changed
+    const { battery, plugged } = batteryInfo;
+    console.log(`Battery: ${battery}% - Charging? ${plugged}`);
+});
 
 client.on('disconnected', (reason) => {
     console.log('Client was logged out', reason);
@@ -307,7 +296,6 @@ app.get('/', (req, res) => {
 })
 
 app.use('/public', express.static('public'), serveIndex('public', { 'icons': true })) // public directory will be publicly available
-
 
 app.listen(process.env.PORT || 8080, () => {
     console.log(`Server listening at Port: ${process.env.PORT || 8080}`)
