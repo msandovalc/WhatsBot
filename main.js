@@ -99,6 +99,10 @@ client.on('message', async msg => {
 
         const chat = await msg.getChat();
 
+        // simulates typing in the chat
+        chat.sendStateTyping();
+         await sleep(4500); // 4.5 seconds
+         
         // Send a new message to the same chat
         client.sendMessage(msg.from, 'Este es el video del concepto general ' +
         'del desarrollo del negocio. ');
@@ -118,6 +122,10 @@ client.on('message', async msg => {
     } else if (msg.body === '2') {
         
         const chat = await msg.getChat();
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+         await sleep(4500); // 4.5 seconds
 
         // Send a new message to the same chat
         client.sendMessage(msg.from, 'Estos son un par de videos de testimonios de 2 grandes mujeres ' +

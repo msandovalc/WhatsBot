@@ -19,6 +19,7 @@ async function mainF(url) {
                 views: format(r.data.items[0].statistics.viewCount),
                 comments: format(r.data.items[0].statistics.commentCount),
                 image: await imageencode(r.data.items[0].snippet.thumbnails.high.url),
+                youtubeview_link: ytview + videoId,
                 download_link: savefromdotnet + videoId
             })
             return out
