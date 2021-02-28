@@ -48,7 +48,7 @@ client.on('message', async msg => {
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        chat.sendMessage(`Hola @${contact.number},` + msg.response, {
+        chat.sendMessage(`Hola @${contact.number}` + msg.response, {
             mentions: [contact]
         });
 
@@ -85,6 +85,9 @@ client.on('message', async msg => {
 
         //var data = await menu.getMenu();
         var msg = await utils.getMessage('!menu');
+
+        console.log(msg); // Print users
+        console.log(msg.response); // Print users
 
         client.sendMessage(msg.from, msg.response)
 
