@@ -42,7 +42,7 @@ client.on('message', async msg => {
     if (msg.body === '!start') {
         const contact = await msg.getContact();
         const chat = await msg.getChat();
-        const msg = utils.getMessage('!bienvenida');
+        var msg = await utils.getMessage('!bienvenida');
 
         // simulates typing in the chat
         chat.sendStateTyping();
@@ -83,8 +83,10 @@ client.on('message', async msg => {
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        var data = await menu.getMenu();
-        client.sendMessage(msg.from, data.message)
+        //var data = await menu.getMenu();
+        var msg = await utils.getMessage('!menu');
+
+        client.sendMessage(msg.from, msg.response)
 
     } else if (msg.body === '1') {
 
