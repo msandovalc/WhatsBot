@@ -86,7 +86,7 @@ client.on('message', async msg => {
 
         console.log(message.response); // Print users
 
-        console.log(client.sendMessage(msg.from, message.response));
+        client.sendMessage(msg.from, message.response);
 
     } else if (msg.body === '1') {
 
