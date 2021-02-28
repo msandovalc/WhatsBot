@@ -42,13 +42,13 @@ client.on('message', async msg => {
     if (msg.body === '!start') {
         const contact = await msg.getContact();
         const chat = await msg.getChat();
-        var msg = utils.getMessage('!bienvenida');
+        var message = utils.getMessage('!bienvenida');
 
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        chat.sendMessage(`Hola @${contact.number}` + msg.response, {
+        chat.sendMessage(`Hola @${contact.number}` + message.response, {
             mentions: [contact]
         });
 
@@ -78,15 +78,15 @@ client.on('message', async msg => {
         chat.clearState();
     } else if (msg.body === '!menu') {
         const chat = await msg.getChat();
-        var msg = utils.getMessage('!menu');
+        var message = utils.getMessage('!menu');
 
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        console.log(msg.response); // Print users
+        console.log(message.response); // Print users
 
-        client.sendMessage(msg.from, msg.response);
+        console.log(client.sendMessage(msg.from, message.response));
 
     } else if (msg.body === '1') {
 
