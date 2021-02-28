@@ -13,7 +13,7 @@ const youtube = require('./modules/youtube');
 const weather = require('./modules/weather');
 const { exec } = require('child_process');
 const help = require('./modules/help');
-const menu = require('./modules/menu');
+const utils = require('./modules/utils');
 const translator = require('./modules/translator');
 const start = require('./modules/start');
 const bonusimage = require('./modules/bonusimage');
@@ -21,6 +21,7 @@ const residualimage = require('./modules/residualimage');
 const ud = require('./modules/ud');
 const { promisify } = require('util')
 const sleep = promisify(setTimeout)
+const messages = require('./messages')
 
 
 const client = new Client({ puppeteer: { headless: true, args: ['--no-sandbox'] }, session: config.session });
@@ -38,28 +39,18 @@ client.on('ready', () => {
 client.on('message', async msg => {
     console.log('MESSAGE RECEIVED', msg);
 
-    if (msg.body === '!ping') {
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'pong');
-    }
-    else if (msg.body === '!start') {
+    if (msg.body === '!start') {
         const contact = await msg.getContact();
         const chat = await msg.getChat();
+        const msg = utils.getMessage('!bienvenida');
 
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        chat.sendMessage(`Hola @${contact.number}, un gusto saludarle 😀!\nSoy el *Bot* de Edificando Sueños, le estaré atendiendo a nombre de Manuel Sandoval`, {
+        chat.sendMessage(`Hola @${contact.number},` + msg.response, {
             mentions: [contact]
         });
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'A continuación le enviaré información acerca de este gran proyecto 👇👇👇👇👇');
 
     } else if (msg.body === '!chats') {
         const chats = await client.getChats();
@@ -102,7 +93,7 @@ client.on('message', async msg => {
         // simulates typing in the chat
         chat.sendStateTyping();
          await sleep(4500); // 4.5 seconds
-         
+
         // Send a new message to the same chat
         client.sendMessage(msg.from, 'Este es el video del concepto general ' +
         'del desarrollo del negocio. ');
