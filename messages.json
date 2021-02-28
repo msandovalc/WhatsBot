@@ -8,7 +8,7 @@
     { 
        "contains": "!menu",
        "exact": "!menu",
-       "response": "Le damos la Bienvenida a nuestro menú de opciones de nuestro *Bot de Edificando Sueños*\n\nPor favor *escriba el número* correspondiente a las siguientes opciones de este menú:\n*1.* Enviar video de concepto del desarrollo del negocio 💰📈📲🤓\n*2.* Enviar 2 videos de testimonios 🎞🤩\n*3.* Enviar imagenes de beneficios e ingresos 📲🤓\n*4.* Horarios de presentaciones de desarrollo del negocio 💻📲🤓\n*5.* Agendar una llamada con Manuel Sandoval 📱🧑‍💻\n",
+       "response": "Le damos la Bienvenida a nuestro menú de opciones de nuestro *Bot de Edificando Sueños*\n\nPor favor *escriba el número* correspondiente a su elección en las siguientes opciones de este menú:\n*1.* Enviar video de concepto del desarrollo del negocio 💰📈📲🤓\n*2.* Enviar 2 videos de testimonios 🎞🤩\n*3.* Enviar imagenes de beneficios e ingresos 📲🤓\n*4.* Horarios de presentaciones de desarrollo del negocio 💻📲🤓\n*5.* Agendar una llamada con Manuel Sandoval 📱🧑‍💻\n",
        "file":""
     },
     {  
