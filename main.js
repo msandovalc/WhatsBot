@@ -42,7 +42,7 @@ client.on('message', async msg => {
     if (msg.body === '!start') {
         const contact = await msg.getContact();
         const chat = await msg.getChat();
-        var msg = await utils.getMessage('!bienvenida');
+        var msg = utils.getMessage('!bienvenida');
 
         // simulates typing in the chat
         chat.sendStateTyping();
@@ -78,18 +78,15 @@ client.on('message', async msg => {
         chat.clearState();
     } else if (msg.body === '!menu') {
         const chat = await msg.getChat();
+        var msg = utils.getMessage('!menu');
 
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        //var data = await menu.getMenu();
-        var msg = await utils.getMessage('!menu');
-
-        console.log(msg); // Print users
         console.log(msg.response); // Print users
 
-        client.sendMessage(msg.from, msg.response)
+        client.sendMessage(msg.from, msg.response);
 
     } else if (msg.body === '1') {
 
@@ -97,7 +94,7 @@ client.on('message', async msg => {
 
         // simulates typing in the chat
         chat.sendStateTyping();
-         await sleep(4500); // 4.5 seconds
+        await sleep(4500); // 4.5 seconds
 
         // Send a new message to the same chat
         client.sendMessage(msg.from, 'Este es el video del concepto general ' +
