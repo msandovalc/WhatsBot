@@ -52,41 +52,69 @@ client.on('message', async msg => {
             mentions: [contact]
         });
 
-    } else if (msg.body === '!chats') {
-        const chats = await client.getChats();
-        client.sendMessage(msg.from, `The bot has ${chats.length} chats open.`);
-    } else if (msg.body === '!info') {
-        let info = client.info;
-        client.sendMessage(msg.from, `
-            *Connection info*
-            User name: ${info.pushname}
-            My number: ${info.me.user}
-            Platform: ${info.platform}
-            WhatsApp version: ${info.phone.wa_version}
-        `);
-    } else if (msg.body === '!typing') {
-        const chat = await msg.getChat();
-        // simulates typing in the chat
-        chat.sendStateTyping();
-    } else if (msg.body === '!recording') {
-        const chat = await msg.getChat();
-        // simulates recording audio in the chat
-        chat.sendStateRecording();
-    } else if (msg.body === '!clearstate') {
-        const chat = await msg.getChat();
-        // stops typing or recording in the chat
-        chat.clearState();
-    } else if (msg.body === '!menu') {
-        const chat = await msg.getChat();
-        var message = utils.getMessage('!menu');
+        message = utils.getMessage('!menu');
 
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
-        console.log(message.response); // Print users
-
         client.sendMessage(msg.from, message.response);
+
+    } else if (msg.body === '1' || '2' || '3' || '4' || '5') {
+        const chat = await msg.getChat();
+        var message = utils.getMessage(msg.body);
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, message.response);
+
+        if (message.youtube !== undefined){
+
+            // Simulates typing in the chat
+            chat.sendStateTyping();
+            await sleep(4500); // 4.5 seconds
+    
+            // Youtube Video
+            var data = await youtube.mainF(message.youtube);
+            if (data == "error") {
+            client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
+            } else {
+            client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                        { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
+            }
+        } else {
+            /* do nothing */
+        }
+
+        if (message.file !== undefined){
+
+            // Simulates typing in the chat
+            chat.sendStateTyping();
+            await sleep(4500); // 4.5 seconds
+    
+            // Send a new media message to the same chat
+            client.sendMessage(msg.from, new MessageMedia(bonusimage.mimetype, bonusimage.data, bonusimage.filename), 
+                                                        { caption: bonusimage.msg });
+
+        } else {
+            /* do nothing */
+        }
+
+        if (message.link !== undefined){
+
+            // Simulates typing in the chat
+            chat.sendStateTyping();
+            await sleep(4500); // 4.5 seconds
+    
+            // Send a new message to the same chat
+            client.sendMessage(msg.from, message.link);
+
+        } else {
+            /* do nothing */
+        }
 
     } else if (msg.body === '1') {
 
@@ -226,6 +254,33 @@ client.on('message', async msg => {
             client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
                                 { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
         }
+    } else if (msg.body === '!chats') {
+        const chats = await client.getChats();
+        client.sendMessage(msg.from, `The bot has ${chats.length} chats open.`);
+    } else if (msg.body === '!info') {
+        let info = client.info;
+        client.sendMessage(msg.from, `
+            *Connection info*
+            User name: ${info.pushname}
+            My number: ${info.me.user}
+            Platform: ${info.platform}
+            WhatsApp version: ${info.phone.wa_version}
+        `);
+    } else if (msg.body === '!typing') {
+        const chat = await msg.getChat();
+        // simulates typing in the chat
+        chat.sendStateTyping();
+    } else if (msg.body === '!recording') {
+        const chat = await msg.getChat();
+        // simulates recording audio in the chat
+        chat.sendStateRecording();
+    } else if (msg.body === '!clearstate') {
+        const chat = await msg.getChat();
+        // stops typing or recording in the chat
+        chat.clearState();
+    } else if (msg.body === '!menu') {
+
+
     } 
 });
 
