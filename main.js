@@ -71,10 +71,16 @@ client.on('message', async msg => {
         // Send a new message to the same chat
         client.sendMessage(msg.from, message.response);
 
+        console.log(message.youtube);
+
         if (message.youtube !== undefined && ""){
+
+            console.log("inside of IF");
 
             message.youtube.forEach(function(element) { 
                             
+                console.log("inside of for each YOUTUBE");
+
                 // Simulates typing in the chat
                 chat.sendStateTyping();
                 sleep(4500); // 4.5 seconds
@@ -99,12 +105,16 @@ client.on('message', async msg => {
 
         if (message.file !== undefined && ""){
 
+            console.log("inside of IF");
+
             // Simulates typing in the chat
             chat.sendStateTyping();
             await sleep(4500); // 4.5 seconds
 
             message.file.forEach(function(element) { 
                 
+                console.log("inside of for each FILE");
+
                 file = utils.getFileInBase64(element)
 
                 console.log(file.name);
