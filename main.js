@@ -42,10 +42,10 @@ client.on('message', async msg => {
     if (msg.body === '!start') {
         const contact = await msg.getContact();
         const chat = await msg.getChat();
-        const message = await utils.getMessage('!bienvenida');
+        var message = await utils.getMessage('!bienvenida');
 
         console.log(message);
-        
+
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
@@ -54,7 +54,7 @@ client.on('message', async msg => {
             mentions: [contact]
         });
 
-        message = utils.getMessage('!menu');
+        message = await utils.getMessage('!menu');
 
         // simulates typing in the chat
         chat.sendStateTyping();
@@ -77,8 +77,14 @@ client.on('message', async msg => {
 
         if (message.youtube !== undefined && message.youtube !== ""){
 
+            console.log("INSIDE IF YOUTUBE");
+
+            console.log(message.youtube);
+
             message.youtube.forEach(async function(element) { 
                             
+                console.log("INSIDE FOR EACH YOUTUBE");
+
                 // Simulates typing in the chat
                 chat.sendStateTyping();
                 sleep(4500); // 4.5 seconds
