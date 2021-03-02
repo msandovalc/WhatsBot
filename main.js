@@ -89,6 +89,7 @@ client.on('message', async msg => {
                 chat.sendStateTyping();
                 sleep(4500); // 4.5 seconds
         
+                console.log("YOUTUBE element");
                 console.log(element);
 
                 // Youtube Video

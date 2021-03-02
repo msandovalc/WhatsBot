@@ -16,7 +16,7 @@
       "exact": "1",
       "response": "Este es el video del concepto general del desarrollo del negocio. 👇",
       "file":"",
-      "youtube":"https://youtu.be/q0QlAHN6wg8"
+      "youtube":["https://youtu.be/q0QlAHN6wg8"]
     },
     {  
       "contains": "2",
@@ -29,7 +29,7 @@
       "contains": "3",
       "exact": "3",
       "response": "Dos imágenes donde se especifica de manera general algunos beneficios y 9 maneras de generar ingresos residuales. 👇",
-      "file":["bonusimage", "residualimage"]
+      "file":["bonus.png", "residual_incomes.jpg"]
     },
     {  
       "contains": "4",
