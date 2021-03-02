@@ -44,8 +44,6 @@ client.on('message', async msg => {
         const chat = await msg.getChat();
         var message = await utils.getMessage('!bienvenida');
 
-        console.log(message);
-
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
@@ -66,8 +64,6 @@ client.on('message', async msg => {
         const chat = await msg.getChat();
         const message = await utils.getMessage(msg.body);
 
-        console.log(message);
-
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
@@ -77,20 +73,11 @@ client.on('message', async msg => {
 
         if (message.youtube !== undefined && message.youtube !== ""){
 
-            console.log("INSIDE IF YOUTUBE");
-
-            console.log(message.youtube);
-
             message.youtube.forEach(async function(element) { 
-                            
-                console.log("INSIDE FOR EACH YOUTUBE");
-
+                        
                 // Simulates typing in the chat
                 chat.sendStateTyping();
                 sleep(4500); // 4.5 seconds
-        
-                console.log("YOUTUBE element");
-                console.log(element);
 
                 // Youtube Video
                 var data = await youtube.mainF(element);
@@ -101,8 +88,11 @@ client.on('message', async msg => {
                 if (data == "error") {
                 client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
                 } else {
-                client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                            { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
+                // client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                //             { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
+
+                client.sendMessage(msg.from, data.youtubeview_link);
+
                 }
               
             });
