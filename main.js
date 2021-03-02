@@ -42,7 +42,7 @@ client.on('message', async msg => {
     if (msg.body === '!start') {
         const contact = await msg.getContact();
         const chat = await msg.getChat();
-        var message = utils.getMessage('!bienvenida');
+        const message = await utils.getMessage('!bienvenida');
 
         // simulates typing in the chat
         chat.sendStateTyping();
@@ -62,7 +62,7 @@ client.on('message', async msg => {
 
     } else if (msg.body === '1' || '2' || '3' || '4' || '5') {
         const chat = await msg.getChat();
-        var message = await utils.getMessage(msg.body);
+        const message = await utils.getMessage(msg.body);
 
         // simulates typing in the chat
         chat.sendStateTyping();
