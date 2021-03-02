@@ -12,7 +12,7 @@ const getMessage = async function (text) { //Promise read data
     } 
 }
 
-const element = messages.map(async function(value) {
+const element = messages.map(function(value) {
   try {
         return {
         contains: value.contains,
