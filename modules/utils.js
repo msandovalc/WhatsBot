@@ -3,7 +3,7 @@ const path = require('path');
 const mime = require('mime');
 var fs = require("fs");
 
-function getMessage(text) { //Promise read data
+async function getMessage(text) { //Promise read data
 
     try {
         var out = getElement(text)
@@ -13,7 +13,7 @@ function getMessage(text) { //Promise read data
     } 
 }
 
-var element = messages.map(function(value) {
+var element = messages.map(async function(value) {
   try {
         return {
         contains: value.contains,
@@ -28,10 +28,10 @@ var element = messages.map(function(value) {
     } 
 });
 
-var getElement = function(text) {
+var getElement = async function(text) {
   try {
         var data;
-        element.forEach(function(value) {
+        element.forEach(async function(value) {
           value.contains === text && (data = value);
         });
     return data;
@@ -41,7 +41,7 @@ var getElement = function(text) {
     
   };
 
-  function getFileInBase64 (filename) {
+  async function getFileInBase64 (filename) {
     try {
         return {
           name: path.join(process.cwd(), filename),

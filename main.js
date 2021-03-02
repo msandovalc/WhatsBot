@@ -73,7 +73,7 @@ client.on('message', async msg => {
 
         if (message.youtube !== undefined && message.youtube !== ""){
 
-            message.youtube.forEach(function(element) { 
+            message.youtube.forEach(async function(element) { 
                             
                 // Simulates typing in the chat
                 chat.sendStateTyping();
@@ -82,7 +82,7 @@ client.on('message', async msg => {
                 console.log(element);
 
                 // Youtube Video
-                var data = youtube.mainF(element);
+                var data = await youtube.mainF(element);
                 if (data == "error") {
                 client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
                 } else {
@@ -103,9 +103,9 @@ client.on('message', async msg => {
             chat.sendStateTyping();
             await sleep(4500); // 4.5 seconds
 
-            message.file.forEach(function(element) { 
+            message.file.forEach(async function(element) { 
                 
-                file = utils.getFileInBase64(element)
+                file = await utils.getFileInBase64(element)
 
                 console.log(file.name);
                 console.log(file.mimetype);
@@ -120,7 +120,7 @@ client.on('message', async msg => {
             /* do nothing */
         }
 
-        if (message.link !== undefined && ""){
+        if (message.link !== undefined && message.link !== ""){
 
             // Simulates typing in the chat
             chat.sendStateTyping();
