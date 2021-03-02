@@ -52,6 +52,9 @@ client.on('message', async msg => {
             mentions: [contact]
         });
 
+        // stops typing or recording in the chat
+        chat.clearState();
+
         message = await utils.getMessage('!menu');
 
         // simulates typing in the chat
@@ -59,6 +62,9 @@ client.on('message', async msg => {
         await sleep(4500); // 4.5 seconds
 
         client.sendMessage(msg.from, message.response);
+
+        // stops typing or recording in the chat
+        chat.clearState();
 
     } else if (msg.body === '1' || '2' || '3' || '4' || '5') {
         const chat = await msg.getChat();
@@ -70,6 +76,9 @@ client.on('message', async msg => {
 
         // Send a new message to the same chat
         client.sendMessage(msg.from, message.response);
+
+        // stops typing or recording in the chat
+        chat.clearState();
 
         if (message.youtube !== undefined && message.youtube !== ""){
 
@@ -87,6 +96,9 @@ client.on('message', async msg => {
                 } else {
                     client.sendMessage(msg.from, data.youtubeview_link);
                 }
+
+                // stops typing or recording in the chat
+                chat.clearState();
               
             });
 
@@ -108,6 +120,9 @@ client.on('message', async msg => {
                 // Send a new media message to the same chat
                 client.sendMessage(msg.from, new MessageMedia(file.mimetype, file.data, file.name), 
                                                         { caption: "" });
+
+                // stops typing or recording in the chat
+                chat.clearState();
               
             });
 
@@ -123,6 +138,9 @@ client.on('message', async msg => {
     
             // Send a new message to the same chat
             client.sendMessage(msg.from, message.link);
+
+            // stops typing or recording in the chat
+            chat.clearState();
 
         } else {
             /* do nothing */
@@ -152,9 +170,8 @@ client.on('message', async msg => {
         const chat = await msg.getChat();
         // stops typing or recording in the chat
         chat.clearState();
-    } else if (msg.body === '!menu') {
-
-
+    } else {
+        /* do nothing */
     } 
 });
 
