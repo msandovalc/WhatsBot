@@ -79,8 +79,10 @@ client.on('message', async msg => {
                 chat.sendStateTyping();
                 sleep(4500); // 4.5 seconds
         
+                console.log(element.youtube);
+
                 // Youtube Video
-                var data = youtube.mainF(element);
+                var data = youtube.mainF(element.youtube);
                 if (data == "error") {
                 client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
                 } else {
@@ -104,6 +106,9 @@ client.on('message', async msg => {
             message.file.forEach(function(element) { 
                 
                 file = utils.getFileInBase64(element)
+
+                console.log(file.name);
+                console.log(file.mimetype);
         
                 // Send a new media message to the same chat
                 client.sendMessage(msg.from, new MessageMedia(file.mimetype, file.data, file.name), 
