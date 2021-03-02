@@ -1,4 +1,7 @@
 const messages = require('../messages.json')
+const path = require('path');
+const mime = require('mime');
+var fs = require("fs");
 
 function getMessage(text) { //Promise read data
 
@@ -38,6 +41,20 @@ var getElement = function(text) {
     
   };
 
+  function getFileInBase64 (filename) {
+    try {
+        return {
+          name: path.join(process.cwd(), filename),
+            // get the mimetype
+          mimetype: mime.getType(filename),
+          data: fs.readFileSync(filename, { encoding: 'base64' })
+          };
+        } catch (error) {
+            return(error);
+        }
+  };
+
 module.exports = {
-    getMessage
+    getMessage,
+    getFileInBase64
 }

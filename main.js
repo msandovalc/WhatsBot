@@ -71,39 +71,51 @@ client.on('message', async msg => {
         // Send a new message to the same chat
         client.sendMessage(msg.from, message.response);
 
-        if (message.youtube !== undefined){
+        if (message.youtube !== undefined && ""){
 
-            // Simulates typing in the chat
-            chat.sendStateTyping();
-            await sleep(4500); // 4.5 seconds
-    
-            // Youtube Video
-            var data = await youtube.mainF(message.youtube);
-            if (data == "error") {
-            client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-            } else {
-            client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                        { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
-            }
-        } else {
-            /* do nothing */
-        }
+            message.youtube.forEach(function(element) { 
+                            
+                // Simulates typing in the chat
+                chat.sendStateTyping();
+                sleep(4500); // 4.5 seconds
+        
+                // Youtube Video
+                var data = youtube.mainF(element);
+                if (data == "error") {
+                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
+                } else {
+                client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
+                            { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
+                }
+              
+            });
 
-        if (message.file !== undefined){
-
-            // Simulates typing in the chat
-            chat.sendStateTyping();
-            await sleep(4500); // 4.5 seconds
-    
-            // Send a new media message to the same chat
-            client.sendMessage(msg.from, new MessageMedia(bonusimage.mimetype, bonusimage.data, bonusimage.filename), 
-                                                        { caption: bonusimage.msg });
 
         } else {
             /* do nothing */
         }
 
-        if (message.link !== undefined){
+        if (message.file !== undefined && ""){
+
+            // Simulates typing in the chat
+            chat.sendStateTyping();
+            await sleep(4500); // 4.5 seconds
+
+            message.file.forEach(function(element) { 
+                
+                file = utils.getFileInBase64(element)
+        
+                // Send a new media message to the same chat
+                client.sendMessage(msg.from, new MessageMedia(file.mimetype, file.data, file.name), 
+                                                        { caption: "" });
+              
+            });
+
+        } else {
+            /* do nothing */
+        }
+
+        if (message.link !== undefined && ""){
 
             // Simulates typing in the chat
             chat.sendStateTyping();
@@ -116,144 +128,6 @@ client.on('message', async msg => {
             /* do nothing */
         }
 
-    } else if (msg.body === '1') {
-
-        const chat = await msg.getChat();
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'Este es el video del concepto general ' +
-        'del desarrollo del negocio. ');
-
-        // Simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Youtube Video
-        var data = await youtube.mainF("https://youtu.be/q0QlAHN6wg8");
-        if (data == "error") {
-        client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-        } else {
-        client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                    { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
-        }
-    } else if (msg.body === '2') {
-        
-        const chat = await msg.getChat();
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-         await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'Estos son un par de videos de testimonios de 2 grandes mujeres ' +
-        'lideres, empoderadas y exitosa que empezaron enfocarse en este proyecto solo con el ' +
-        'deseo de hacer realidad sus sueños.' );
-
-        // Simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Youtube Video
-        var data = await youtube.mainF("https://youtu.be/hyhd7AJ19CU");
-        if (data == "error") {
-        client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-        } else {
-        client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                    { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
-        }
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Youtube Video
-        data = await youtube.mainF("https://youtu.be/iynQrsFZvvM");
-        if (data == "error") {
-            client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-        } else {
-            client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                                { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
-        }
-    } else if (msg.body === '3') {
-
-        const chat = await msg.getChat();
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'Dos imágenes donde se especifica de manera general algunos beneficios  ' +
-                                    'y 9 maneras de generar ingresos residuales');
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Send a new media message to the same chat
-        client.sendMessage(msg.from, new MessageMedia(bonusimage.mimetype, bonusimage.data, bonusimage.filename), { caption: bonusimage.msg });
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        client.sendMessage(msg.from, new MessageMedia(residualimage.mimetype, residualimage.data, residualimage.filename), { caption: residualimage.msg });
-        
-    }  else if (msg.body === '4') {
-
-        const chat = await msg.getChat();
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'Estos son los horarios de las presentacciónes de negocios  ' +
-                                    'Por favor elige uno de los horarios a continuación -->');
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-    } else if (msg.body === '5') {
-
-        const chat = await msg.getChat();
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'Por favor elige alguna de las opciones disponibles para agendar la llamada ' +
-                                    'Calendaly -->');
-
-    } else if (msg.body === '6') {
-
-        const chat = await msg.getChat();
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-         await sleep(4500); // 4.5 seconds
-
-        // Send a new message to the same chat
-        client.sendMessage(msg.from, 'Vive una vida diferente');
-
-        // simulates typing in the chat
-        chat.sendStateTyping();
-        await sleep(4500); // 4.5 seconds
-
-        // Youtube Video
-        data = await youtube.mainF("https://youtu.be/HqhkFq-4yj8");
-        if (data == "error") {
-            client.sendMessage(msg.from, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
-        } else {
-            client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                                { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
-        }
     } else if (msg.body === '!chats') {
         const chats = await client.getChats();
         client.sendMessage(msg.from, `The bot has ${chats.length} chats open.`);

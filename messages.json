@@ -14,21 +14,21 @@
     {  
       "contains": "1",
       "exact": "1",
-      "response": "Este es el video del concepto general del desarrollo del negocio.",
+      "response": "Este es el video del concepto general del desarrollo del negocio. 👇",
       "file":"",
       "youtube":"https://youtu.be/q0QlAHN6wg8"
     },
     {  
       "contains": "2",
       "exact": "2",
-      "response": "Estos son un par de videos de testimonios de 2 grandes mujeres lideres, empoderadas y exitosa que empezaron enfocarse en este proyecto solo con el deseo de hacer realidad sus sueños.",
+      "response": "Estos son un par de videos de testimonios de 2 grandes mujeres lideres, empoderadas y exitosa que empezaron enfocarse en este proyecto solo con el deseo de hacer realidad sus sueños. 👇",
       "file":"",
       "youtube":["https://youtu.be/hyhd7AJ19CU", "https://youtu.be/iynQrsFZvvM"]
     },
     {  
       "contains": "3",
       "exact": "3",
-      "response": "Dos imágenes donde se especifica de manera general algunos beneficios y 9 maneras de generar ingresos residuales.",
+      "response": "Dos imágenes donde se especifica de manera general algunos beneficios y 9 maneras de generar ingresos residuales. 👇",
       "file":["bonusimage", "residualimage"]
     },
     {  
@@ -41,6 +41,6 @@
       "contains": "5",
       "exact": "5",
       "response": "Por favor elige alguna de las opciones disponibles para agendar la llamada Calendaly -->",
-      "link":""
+      "link":"https://edificandosuenos.com/"
     }
   ] 
