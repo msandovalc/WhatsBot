@@ -44,6 +44,8 @@ client.on('message', async msg => {
         const chat = await msg.getChat();
         const message = await utils.getMessage('!bienvenida');
 
+        console.log(message);
+        
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
@@ -63,6 +65,8 @@ client.on('message', async msg => {
     } else if (msg.body === '1' || '2' || '3' || '4' || '5') {
         const chat = await msg.getChat();
         const message = await utils.getMessage(msg.body);
+
+        console.log(message);
 
         // simulates typing in the chat
         chat.sendStateTyping();
