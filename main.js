@@ -80,16 +80,12 @@ client.on('message', async msg => {
                 await sleep(4500); // 4.5 seconds
 
                 // Youtube Video
-                var data = await youtube.mainF(element);
+                const data = await youtube.mainF(element);
 
                 if (data == "error") {
-                client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
+                    client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
                 } else {
-                // client.sendMessage(msg.from, new MessageMedia(data.image.mimetype, data.image.data, data.image.filename), 
-                //             { caption: `*${data.title}*\n\n` + "*" + data.youtubeview_link + "*" });
-
-                client.sendMessage(msg.from, data.youtubeview_link);
-
+                    client.sendMessage(msg.from, data.youtubeview_link);
                 }
               
             });
@@ -99,27 +95,16 @@ client.on('message', async msg => {
             /* do nothing */
         }
 
-        console.log(message.file);
-
         if (message.file !== undefined && message.file !== ""){
 
-            console.log("INSIDE OF IF FILE");
-            console.log(message.file);
-
-            // Simulates typing in the chat
-            chat.sendStateTyping();
-            await sleep(4500); // 4.5 seconds
-
             message.file.forEach(async function(element) { 
-                
-                console.log(element);
+
+                // Simulates typing in the chat
+                chat.sendStateTyping();
+                await sleep(4500); // 4.5 seconds
                 
                 file = await utils.getFileInBase64(element)
-
-                console.log(file);
-                console.log(file.name);
-                console.log(file.mimetype);
-        
+      
                 // Send a new media message to the same chat
                 client.sendMessage(msg.from, new MessageMedia(file.mimetype, file.data, file.name), 
                                                         { caption: "" });
