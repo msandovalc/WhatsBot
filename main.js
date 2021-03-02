@@ -71,24 +71,18 @@ client.on('message', async msg => {
         // Send a new message to the same chat
         client.sendMessage(msg.from, message.response);
 
-        console.log(message.youtube);
-
-        if (message.youtube !== undefined && ""){
-
-            console.log("inside of IF");
+        if (message.youtube !== undefined && message.youtube !== ""){
 
             message.youtube.forEach(function(element) { 
                             
-                console.log("inside of for each YOUTUBE");
-
                 // Simulates typing in the chat
                 chat.sendStateTyping();
                 sleep(4500); // 4.5 seconds
         
-                console.log(element.youtube);
+                console.log(element);
 
                 // Youtube Video
-                var data = youtube.mainF(element.youtube);
+                var data = youtube.mainF(element);
                 if (data == "error") {
                 client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
                 } else {
@@ -103,9 +97,7 @@ client.on('message', async msg => {
             /* do nothing */
         }
 
-        if (message.file !== undefined && ""){
-
-            console.log("inside of IF");
+        if (message.file !== undefined && message.file !== ""){
 
             // Simulates typing in the chat
             chat.sendStateTyping();
@@ -113,8 +105,6 @@ client.on('message', async msg => {
 
             message.file.forEach(function(element) { 
                 
-                console.log("inside of for each FILE");
-
                 file = utils.getFileInBase64(element)
 
                 console.log(file.name);
