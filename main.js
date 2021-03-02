@@ -62,7 +62,7 @@ client.on('message', async msg => {
 
     } else if (msg.body === '1' || '2' || '3' || '4' || '5') {
         const chat = await msg.getChat();
-        var message = utils.getMessage(msg.body);
+        var message = await utils.getMessage(msg.body);
 
         // simulates typing in the chat
         chat.sendStateTyping();
@@ -83,6 +83,10 @@ client.on('message', async msg => {
 
                 // Youtube Video
                 var data = await youtube.mainF(element);
+
+                console.log("YOUTUBE DATA");
+                console.log(data);
+
                 if (data == "error") {
                 client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
                 } else {
