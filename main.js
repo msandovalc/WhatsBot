@@ -77,13 +77,10 @@ client.on('message', async msg => {
                         
                 // Simulates typing in the chat
                 chat.sendStateTyping();
-                sleep(4500); // 4.5 seconds
+                await sleep(4500); // 4.5 seconds
 
                 // Youtube Video
                 var data = await youtube.mainF(element);
-
-                console.log("YOUTUBE DATA");
-                console.log(data);
 
                 if (data == "error") {
                 client.sendMessage(msg.to, `🙇‍♂️ *Error*\n\n` + "```Something Unexpected Happened to fetch the YouTube video```")
@@ -102,7 +99,12 @@ client.on('message', async msg => {
             /* do nothing */
         }
 
+        console.log(message.file);
+
         if (message.file !== undefined && message.file !== ""){
+
+            console.log("INSIDE OF IF FILE");
+            console.log(message.file);
 
             // Simulates typing in the chat
             chat.sendStateTyping();
@@ -112,6 +114,7 @@ client.on('message', async msg => {
                 
                 file = await utils.getFileInBase64(element)
 
+                console.log(file);
                 console.log(file.name);
                 console.log(file.mimetype);
         
