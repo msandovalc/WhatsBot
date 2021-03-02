@@ -112,6 +112,8 @@ client.on('message', async msg => {
 
             message.file.forEach(async function(element) { 
                 
+                console.log(element);
+                
                 file = await utils.getFileInBase64(element)
 
                 console.log(file);
