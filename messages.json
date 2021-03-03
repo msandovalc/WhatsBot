@@ -40,13 +40,19 @@
     {  
       "contains": "4",
       "exact": "4",
-      "response": "Estos son los horarios de las presentacciónes de negocios\nPor favor elige uno de los horarios a continuación -->",
-      "link":""
+      "response": "Por favor eliga alguna de las horarios disponibles en el calendario para agendar la presentación de negocios. 👇",
+      "link":"https://calendly.com/edificandosuenos/60min"
     },
     {  
       "contains": "5",
       "exact": "5",
-      "response": "Por favor elige alguna de las opciones disponibles para agendar la llamada Calendaly -->",
+      "response": "Por favor eliga alguna de las horarios disponibles en el calendario para agendar una llamada telefónica. 👇",
+      "link":"https://calendly.com/edificandosuenos/30min"
+    }
+    {  
+      "contains": "6",
+      "exact": "6",
+      "response": "Le comparto esta información con la finalidad de que la pueda revisar y tenga una idea de la magnitud de este proyecto. 👇",
       "link":"https://edificandosuenos.com/"
     }
   ] 
