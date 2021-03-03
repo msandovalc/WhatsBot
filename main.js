@@ -55,12 +55,26 @@ client.on('message', async msg => {
         // stops typing or recording in the chat
         chat.clearState();
 
-        message = await utils.getMessage('!menu');
+        message = await utils.getMessage('0');
 
         // simulates typing in the chat
         chat.sendStateTyping();
         await sleep(4500); // 4.5 seconds
 
+        client.sendMessage(msg.from, message.response);
+
+        // stops typing or recording in the chat
+        chat.clearState();
+
+    } else if (msg.body === '0') {
+        const chat = await msg.getChat();
+        const message = await utils.getMessage(msg.body);
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
         client.sendMessage(msg.from, message.response);
 
         // stops typing or recording in the chat
@@ -146,6 +160,18 @@ client.on('message', async msg => {
             /* do nothing */
         }
 
+        const msgdefault = await utils.getMessage('default');
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, msgdefault.response);
+
+        // stops typing or recording in the chat
+        chat.clearState();
+
     } else if (msg.body === '!chats') {
         const chats = await client.getChats();
         client.sendMessage(msg.from, `The bot has ${chats.length} chats open.`);
@@ -171,7 +197,18 @@ client.on('message', async msg => {
         // stops typing or recording in the chat
         chat.clearState();
     } else {
-        /* do nothing */
+        const chat = await msg.getChat();
+        const message = await utils.getMessage('0');
+
+        // simulates typing in the chat
+        chat.sendStateTyping();
+        await sleep(4500); // 4.5 seconds
+
+        // Send a new message to the same chat
+        client.sendMessage(msg.from, message.response);
+
+        // stops typing or recording in the chat
+        chat.clearState();
     } 
 });
 
