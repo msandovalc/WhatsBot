@@ -80,7 +80,7 @@ client.on('message', async msg => {
         // stops typing or recording in the chat
         chat.clearState();
 
-    } else if (msg.body === '1' || '2' || '3' || '4' || '5') {
+    } else if (msg.body === '1' || '2' || '3' || '4' || '5' || '6') {
         const chat = await msg.getChat();
         const message = await utils.getMessage(msg.body);
 
